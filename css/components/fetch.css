@@ -12,6 +12,7 @@
 .fetch-body { display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start; }
 .avatar {
   width: 240px; height: auto; aspect-ratio: 1; flex: none;
+  image-rendering: pixelated;
   border-radius: 8px;
   border: 1px solid var(--line);
 }
