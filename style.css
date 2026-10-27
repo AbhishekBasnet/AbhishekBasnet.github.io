@@ -166,3 +166,22 @@ h3 { font-size: 18px; margin: 0 0 8px; }
   html { scroll-behavior: auto; }
   .cursor { animation: none; }
 }
+
+/* Wide screens: menu becomes a left sidebar, content uses the extra width. */
+@media (min-width: 1100px) {
+  .menu {
+    position: fixed; top: 63px; bottom: 53px; left: 0;
+    width: 260px;
+    flex-direction: column; flex-wrap: nowrap; gap: 2px;
+    padding: 40px 24px;
+    border-bottom: none;
+    border-right: 1px solid var(--line);
+  }
+  .menu::before { content: "~/portfolio"; color: var(--muted); font-size: 14px; padding: 0 12px 10px; }
+  .menu a { border-bottom: none; border-left: 2px solid transparent; border-radius: 0 6px 6px 0; padding: 6px 12px; }
+  .menu a.active { border-left-color: var(--accent); background: var(--panel); }
+  .terminal { max-width: 1240px; margin: 0 0 0 260px; padding: 0 clamp(48px, 5vw, 96px) 140px; }
+  .cards { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+  .footer { margin-left: 260px; }
+  html { scroll-padding-top: 80px; }
+}
