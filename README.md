@@ -2,7 +2,7 @@
 
 A terminal-style personal portfolio with a calm Nordic look. Plain HTML, CSS and JavaScript: no build step, no dependencies.
 
-Live: https://asyncabhi.me (custom domain via `CNAME`), fallback https://abhishekbasnet.github.io
+Live: https://abhishekbasnet.github.io
 
 ## Preview locally
 
