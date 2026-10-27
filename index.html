@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Abhishek Basnet — Developer</title>
+  <meta name="description" content="Portfolio of Abhishek Basnet: backend and systems developer from Nepal.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Short boot screen. Click, press any key, or wait ~1.5s to skip. -->
+  <div id="boot" aria-hidden="true">
+    <pre id="boot-log"></pre>
+    <button id="boot-skip" type="button">Skip →</button>
+  </div>
+
+  <header class="topbar">
+    <a class="brand" href="#home"><span class="prompt">~</span> abhishek<span class="cursor">_</span></a>
+    <div class="topbar-actions">
+      <button id="theme-toggle" type="button" aria-label="Switch light or dark theme">◐ theme</button>
+      <a class="btn btn-primary" href="resume.pdf" download>↓ Resume</a>
+    </div>
+  </header>
+
+  <nav class="menu" aria-label="Sections">
+    <a href="#about">&gt; about</a>
+    <a href="#projects">&gt; projects</a>
+    <a href="#skills">&gt; skills</a>
+    <a href="#experience">&gt; experience</a>
+    <a href="#contact">&gt; contact</a>
+  </nav>
+
+  <main class="terminal">
+    <section id="home" class="hero">
+      <p class="cmd"><span class="ps1">abhishek@nordic:~$</span> whoami</p>
+      <h1 class="type-target">Hi, I'm Abhishek Basnet.</h1>
+      <p class="lead">I build backend systems, developer tools and Linux utilities. I like software that is simple, fast and quietly reliable.</p>
+      <p class="hint">Click a command above, or scroll down. You can also type <kbd>help</kbd> in the box at the bottom.</p>
+    </section>
+
+    <section id="about">
+      <p class="cmd"><span class="ps1">abhishek@nordic:~$</span> cat about.txt</p>
+      <h2>About me</h2>
+      <p>I'm a developer from Nepal who studied at Nepal College of Information Technology. I enjoy working close to the system: servers, queues, databases and the Linux desktop I use every day (Fedora KDE).</p>
+      <p>Outside of code, I like calm places, especially a quiet lake and a fishing rod.</p>
+    </section>
+
+    <section id="projects">
+      <p class="cmd"><span class="ps1">abhishek@nordic:~$</span> ls projects/</p>
+      <h2>Projects</h2>
+      <!-- DRAFT descriptions: edit each one so it says exactly what the project does and what you did. -->
+      <div class="cards">
+        <article class="card">
+          <h3>goredis</h3>
+          <p>A Redis-style in-memory key-value store written in Go.</p>
+          <p class="tags">Go · Networking · Data structures</p>
+          <a href="https://github.com/AbhishekBasnet/goredis">View code →</a>
+        </article>
+        <article class="card">
+          <h3>Api-Drift</h3>
+          <p>A tool that spots when an API's real behaviour drifts away from its documentation.</p>
+          <p class="tags">APIs · Testing</p>
+          <a href="https://github.com/AbhishekBasnet/Api-Drift">View code →</a>
+        </article>
+        <article class="card">
+          <h3>NixMon</h3>
+          <p>A system monitor for Unix and Linux machines that shows CPU, memory and process usage.</p>
+          <p class="tags">Linux · Systems</p>
+          <a href="https://github.com/AbhishekBasnet/NixMon_Unix-Linux-Monitor">View code →</a>
+        </article>
+        <article class="card">
+          <h3>Rep Rise</h3>
+          <p>A workout tracking app with its own backend server.</p>
+          <p class="tags">Mobile · Backend · API</p>
+          <a href="https://github.com/AbhishekBasnet/rep_rise">View app →</a>
+          <a href="https://github.com/AbhishekBasnet/rep_rise_backend">View backend →</a>
+        </article>
+        <article class="card">
+          <h3>AutoPlate</h3>
+          <p>The backend for a vehicle number-plate recognition system.</p>
+          <p class="tags">Backend · Computer vision</p>
+          <a href="https://github.com/AbhishekBasnet/AutoPlate_backEnd">View code →</a>
+        </article>
+        <article class="card">
+          <h3>Fedora KDE Hotspot Controller</h3>
+          <p>A small tool to share a Fedora KDE laptop's internet as a Wi-Fi hotspot.</p>
+          <p class="tags">Linux · Networking · Shell</p>
+          <a href="https://github.com/AbhishekBasnet/fedora43Kde-bridge-hotspot-controller">View code →</a>
+        </article>
+      </div>
+    </section>
+
+    <section id="skills">
+      <p class="cmd"><span class="ps1">abhishek@nordic:~$</span> cat skills.txt</p>
+      <h2>Skills</h2>
+      <!-- DRAFT: replace with your real skills. -->
+      <dl class="skills">
+        <dt>Languages</dt><dd>Go, Python, JavaScript</dd>
+        <dt>Backend</dt><dd>REST APIs, message queues, databases</dd>
+        <dt>Systems</dt><dd>Linux, shell scripting, networking</dd>
+        <dt>Tools</dt><dd>Git, Docker, VS Code</dd>
+      </dl>
+    </section>
+
+    <section id="experience">
+      <p class="cmd"><span class="ps1">abhishek@nordic:~$</span> history</p>
+      <h2>Experience &amp; education</h2>
+      <!-- DRAFT: replace with your real history. -->
+      <ol class="timeline">
+        <li><span class="when">20XX – now</span><span class="what"><strong>Your role</strong> · Company</span><span class="why">One line about what you achieved.</span></li>
+        <li><span class="when">20XX – 20XX</span><span class="what"><strong>Your degree</strong> · Nepal College of Information Technology</span><span class="why">One line about focus or highlights.</span></li>
+      </ol>
+    </section>
+
+    <section id="contact">
+      <p class="cmd"><span class="ps1">abhishek@nordic:~$</span> contact</p>
+      <h2>Let's talk</h2>
+      <p>The easiest way to reach me is email.</p>
+      <div class="contact-row">
+        <a class="btn btn-primary" href="mailto:you@example.com">✉ Email me</a>
+        <button class="btn" type="button" id="copy-email" data-email="you@example.com">Copy email</button>
+        <a class="btn" href="https://github.com/AbhishekBasnet">GitHub</a>
+        <!-- TODO: add your LinkedIn URL -->
+        <a class="btn" href="#">LinkedIn</a>
+      </div>
+    </section>
+
+    <section id="output" aria-live="polite"></section>
+  </main>
+
+  <form id="cli" class="cli" autocomplete="off">
+    <label for="cli-input" class="ps1">abhishek@nordic:~$</label>
+    <input id="cli-input" type="text" spellcheck="false" placeholder="type help (optional)">
+  </form>
+
+  <footer class="footer">© <span id="year"></span> Abhishek Basnet · built with plain HTML, CSS &amp; JS</footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
