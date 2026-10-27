@@ -20,7 +20,7 @@
 
   function print(cmd, reply) {
     const pre = document.createElement("pre");
-    pre.innerHTML = '<span class="ps1">abhishek@nordic:~$</span> ';
+    pre.innerHTML = '<span class="ps1">abhishek@dev:~$</span> ';
     pre.append(cmd + (reply ? "\n" + reply : ""));
     output.append(pre);
     output.scrollIntoView({ behavior: "smooth", block: "end" });
