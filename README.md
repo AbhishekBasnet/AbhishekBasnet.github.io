@@ -21,7 +21,7 @@ css/
   base.css                 Element defaults: body, headings, links, buttons
   layout.css               Page skeleton: top bar, menu/sidebar, columns, breakpoints
   components/              One file per page part
-    boot.css  fetch.css  timeline.css  cards.css  skills.css  contact.css  cli.css
+    boot.css  fetch.css  timeline.css  cards.css  education.css  skills.css  contact.css  cli.css
 js/
   theme.js                 Light/dark toggle (loaded first, exposes window.Portfolio.theme)
   boot.js                  Startup animation

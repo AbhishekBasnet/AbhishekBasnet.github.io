@@ -35,7 +35,7 @@ section { padding: 72px 0 24px; }
   .footer { padding-bottom: 32px; }
   .brand { font-size: 16px; }
   #theme-toggle { padding: 7px 10px; }
-  .menu { top: 58px; gap: 4px 16px; font-size: 15px; }
+  .menu { gap: 4px 16px; font-size: 15px; }
 }
 
 /* Wide screens: menu becomes a left sidebar, content fills the rest. */

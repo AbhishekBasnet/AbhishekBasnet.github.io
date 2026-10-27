@@ -1,0 +1,6 @@
+/* Education (#education): a single degree entry. */
+.degree {
+  display: grid; gap: 2px;
+  padding-left: 18px;
+  border-left: 2px solid var(--accent);
+}
