@@ -41,6 +41,7 @@
     const name = cmd.split(/\s+/)[0];
     if (sections.includes(name)) {
       document.getElementById(name).scrollIntoView({ behavior: "smooth" });
+      window.Portfolio.nav.pin(name);
       return;
     }
     const run = commands[name];
