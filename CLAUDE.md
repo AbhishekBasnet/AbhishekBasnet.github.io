@@ -3,9 +3,9 @@
 Static portfolio site (GitHub Pages). See README.md for the file map. Keep it that way:
 
 - **No build step, no frameworks, no npm.** Plain HTML/CSS/JS so it runs by opening `index.html` from disk.
-- **JS files are classic scripts, not ES modules** (`file://` blocks modules). Each file is an IIFE for one feature. Shared state goes on `window.Portfolio` (currently only `theme`). `js/theme.js` loads un-deferred in `<head>`; the rest use `defer`.
+- **JS files are classic scripts, not ES modules** (`file://` blocks modules). Each file is an IIFE for one feature. Shared state goes on `window.Portfolio` (`theme`, `neofetch`). `js/theme.js` loads un-deferred in `<head>`; the rest use `defer`.
 - **CSS layering:** `tokens.css` (variables only) → `base.css` (elements) → `layout.css` (skeleton + breakpoints) → `components/*.css` (one per section). Use tokens, never hard-coded colours, except the neon palette in `fetch.css` which matches the avatar art.
-- **Breakpoints:** `<=640px` phone (no command box), `>=1100px` sidebar menu, `>=1280px` two-column intro/split/timeline. Check all of them; no horizontal scroll at any width.
+- **Breakpoints:** `<=640px` phone (no command box), `>=1100px` sidebar menu, `>=1280px` two-column about/skills and horizontal timeline. The neofetch panel is a `<dialog>` opened by a button, never inline. Check all of them; no horizontal scroll at any width.
 - **Write each value once.** The prompt text comes from `--prompt-user`/`--prompt-host` in `tokens.css` (rendered by `.ps1::before` and `.fetch-title::before`, so those elements stay empty in HTML). Email lives only in `#email-link`, resume path only in `#resume-link`, owner name for JS in `<meta name="author">`, section list in the `.menu` links. JS reads these from the page; don't hard-code copies. Exception: breakpoints (640/1100/1280px) repeat per file because CSS variables don't work in media queries.
 - **Content lives in `index.html`.** Comments marked `DRAFT` or `TODO` are placeholders the owner still needs to fill in. Never invent facts about the owner (jobs, dates, skills); ask instead.
 - **Must stay readable for non-technical visitors:** everything reachable by clicking; typed commands are a bonus only.

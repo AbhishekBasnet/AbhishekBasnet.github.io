@@ -25,6 +25,7 @@
   <!-- Behaviour: one small file per feature, plain scripts so the page also works when opened from disk -->
   <script src="js/boot.js" defer></script>
   <script src="js/nav.js" defer></script>
+  <script src="js/fetch.js" defer></script>
   <script src="js/contact.js" defer></script>
   <script src="js/cli.js" defer></script>
 </head>
@@ -53,17 +54,20 @@
   </nav>
 
   <main class="terminal">
-    <div class="intro">
     <section id="home" class="hero">
       <p class="cmd"><span class="ps1"></span> whoami</p>
       <h1 class="type-target">Hi, I'm Abhishek Basnet.</h1>
       <p class="lead">I build backend systems and developer tools. I like software that is simple, fast and quietly reliable.</p>
+      <button type="button" class="btn fetch-open" id="fetch-open" aria-haspopup="dialog"><span class="ps1"></span> neofetch <span class="fetch-open-hint">· quick facts</span></button>
       <p class="hint">Click a section in the menu, or scroll down. You can also type <kbd>help</kbd> in the box at the bottom.</p>
     </section>
 
-    <!-- Quick facts in neofetch style. DRAFT values: check each line. -->
-    <aside class="fetch" aria-label="Quick facts">
-      <p class="cmd"><span class="ps1"></span> neofetch</p>
+    <!-- Quick facts in neofetch style, opened by #fetch-open (see js/fetch.js). -->
+    <dialog class="fetch" id="fetch" aria-label="Quick facts">
+      <div class="fetch-head">
+        <p class="cmd"><span class="ps1"></span> neofetch</p>
+        <button type="button" class="fetch-close" id="fetch-close" aria-label="Close quick facts">✕</button>
+      </div>
       <div class="fetch-body">
         <img class="avatar" src="assets/avatar.png" alt="Pixel art of a developer desk with three monitors in a neon cyberpunk city" width="512" height="512">
         <dl class="fetch-info">
@@ -78,8 +82,7 @@
         </dl>
       </div>
       <div class="fetch-colors" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
-    </aside>
-    </div>
+    </dialog>
 
     <section id="experience">
       <p class="cmd"><span class="ps1"></span> history</p>

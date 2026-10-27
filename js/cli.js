@@ -12,7 +12,8 @@
   const resumeUrl = document.getElementById("resume-link").getAttribute("href");
   const ownerName = document.querySelector('meta[name="author"]').content;
   const commands = {
-    help: () => "Commands: " + sections.join(", ") + ", resume, theme, fish, clear",
+    help: () => "Commands: " + sections.join(", ") + ", neofetch, resume, theme, fish, clear",
+    neofetch: () => { window.Portfolio.neofetch.open(); return null; },
     resume: () => { location.href = resumeUrl; return "Opening resume ..."; },
     theme: () => { window.Portfolio.theme.toggle(); return "Theme switched."; },
     fish: () => "  ><(((º>   gone fishing. back soon.",

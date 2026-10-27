@@ -26,10 +26,11 @@ js/
   theme.js                 Light/dark toggle (loaded first, exposes window.Portfolio.theme)
   boot.js                  Startup animation
   nav.js                   Highlights the current section in the menu
+  fetch.js                 Opens/closes the neofetch quick-facts dialog
   contact.js               Copy-email button, footer year
   cli.js                   Optional typed commands (help, fish, theme, ...)
 assets/
-  avatar.png               512x512 pixel-art scene in the neofetch panel
+  avatar.png               128x128 pixel-art scene in the neofetch dialog
 tools/
   draw_avatar.py           Generates assets/avatar.png from code
   pixelate.py              Turns a real photo into a pixel-art avatar
