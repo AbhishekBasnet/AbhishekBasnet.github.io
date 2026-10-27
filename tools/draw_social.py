@@ -21,7 +21,7 @@ SAGE = (163, 191, 168)
 
 NAME = "Abhishek Man Basnet"
 ROLE = "Software Engineer"
-DETAIL = "Flutter · Django · Go"
+DETAIL = "Flutter · FastAPI · Go"
 URL = "abhishekbasnet.github.io"
 PROMPT = "abhishek@dev:~$ whoami"
 
