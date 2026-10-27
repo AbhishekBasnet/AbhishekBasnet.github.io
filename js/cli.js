@@ -7,20 +7,23 @@
   const history = [];
   let historyIndex = 0;
 
+  // Everything below is read from index.html so each value is written only once.
   const sections = [...document.querySelectorAll(".menu a")].map((a) => a.hash.slice(1));
+  const resumeUrl = document.getElementById("resume-link").getAttribute("href");
+  const ownerName = document.querySelector('meta[name="author"]').content;
   const commands = {
     help: () => "Commands: " + sections.join(", ") + ", resume, theme, fish, clear",
-    resume: () => { location.href = "resume.pdf"; return "Opening resume ..."; },
+    resume: () => { location.href = resumeUrl; return "Opening resume ..."; },
     theme: () => { window.Portfolio.theme.toggle(); return "Theme switched."; },
     fish: () => "  ><(((º>   gone fishing. back soon.",
-    whoami: () => "Abhishek Basnet, developer.",
+    whoami: () => ownerName + ", developer.",
     sudo: () => "Nice try. But you can hire me without sudo :)",
     clear: () => { output.innerHTML = ""; return null; },
   };
 
   function print(cmd, reply) {
     const pre = document.createElement("pre");
-    pre.innerHTML = '<span class="ps1">abhishek@dev:~$</span> ';
+    pre.innerHTML = '<span class="ps1"></span> ';
     pre.append(cmd + (reply ? "\n" + reply : ""));
     output.append(pre);
     output.scrollIntoView({ behavior: "smooth", block: "end" });

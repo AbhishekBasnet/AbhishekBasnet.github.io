@@ -22,7 +22,8 @@
 .fetch-info dt { color: var(--accent); flex: none; }
 .fetch-info dt::after { content: ":"; }
 .fetch-info dd { margin: 0; }
-.fetch-title span { color: var(--accent-2); font-weight: 600; }
+.fetch-title { color: var(--accent-2); font-weight: 600; }
+.fetch-title::before { content: var(--prompt-user) "@" var(--prompt-host); }
 .fetch-rule { color: var(--muted); }
 .dot { display: inline-block; width: 8px; height: 8px; margin-right: 6px; border-radius: 50%; background: #6aa77a; }
 

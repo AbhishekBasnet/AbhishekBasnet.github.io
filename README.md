@@ -43,6 +43,9 @@ docs/
 |----------------------------------|---------------------------------------------------------|
 | Change text, projects, jobs      | `index.html` (look for `DRAFT` / `TODO` comments)       |
 | Change colours or fonts          | `css/tokens.css`                                        |
+| Change the `user@host:~$` prompt | `css/tokens.css`: `--prompt-user`, `--prompt-host`      |
+| Change email                     | `index.html`: the `mailto:` link with `id="email-link"` |
+| Change resume file               | `index.html`: the link with `id="resume-link"`          |
 | Add a new section                | `index.html`: add `<section id="x">` and a menu link `<a href="#x">` (the `x` command works automatically) |
 | Add a typed command              | `js/cli.js`, `commands` object                          |
 | Regenerate the avatar            | `pip install pillow numpy && python3 tools/draw_avatar.py` |

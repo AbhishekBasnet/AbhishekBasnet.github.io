@@ -33,6 +33,7 @@ button:hover, .btn:hover { border-color: var(--accent); color: var(--accent); }
 /* Terminal prompt text used across sections */
 .cmd { font: 15px var(--mono); color: var(--muted); margin: 0 0 8px; }
 .ps1 { color: var(--accent-2); font-family: var(--mono); }
+.ps1::before { content: var(--prompt-user) "@" var(--prompt-host) ":~$"; }
 .cursor { animation: blink 1.1s steps(1) infinite; color: var(--accent); }
 @keyframes blink { 50% { opacity: 0; } }
 

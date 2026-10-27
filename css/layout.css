@@ -12,7 +12,7 @@
 .topbar-actions { display: flex; gap: 10px; align-items: center; }
 
 .menu {
-  position: sticky; top: 62px; z-index: 9;
+  position: sticky; top: calc(var(--topbar-h) - 1px); z-index: 9;
   display: flex; flex-wrap: wrap; gap: 6px 22px;
   padding: 10px clamp(16px, 4vw, 48px);
   background: var(--bg);
