@@ -134,6 +134,42 @@ h3 { font-size: 18px; margin: 0 0 8px; }
 #output:empty { display: none; }
 #output pre { font: 15px/1.7 var(--mono); white-space: pre-wrap; margin: 0; }
 
+/* Neofetch quick-facts panel */
+.fetch {
+  margin: 8px 0 0;
+  padding: 20px 22px;
+  max-width: 560px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  font: 14px/1.6 var(--mono);
+}
+.fetch .cmd { font-size: 13px; margin-bottom: 14px; }
+.fetch-body { display: flex; gap: 20px; align-items: flex-start; }
+.avatar {
+  width: 120px; height: 120px; flex: none;
+  image-rendering: pixelated;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+}
+.fetch-info { margin: 0; min-width: 0; }
+.fetch-info > div { display: flex; gap: 8px; }
+.fetch-info dt { color: var(--accent); flex: none; }
+.fetch-info dt::after { content: ":"; }
+.fetch-info dd { margin: 0; }
+.fetch-title span { color: var(--accent-2); font-weight: 600; }
+.fetch-rule { color: var(--muted); }
+.fetch-info > .fetch-title, .fetch-info > .fetch-rule { display: block; }
+.dot { display: inline-block; width: 8px; height: 8px; margin-right: 6px; border-radius: 50%; background: #6aa77a; }
+.fetch-colors { display: flex; gap: 0; margin-top: 16px; }
+.fetch-colors span { width: 28px; height: 14px; }
+.fetch-colors span:nth-child(1) { background: #2b3138; }
+.fetch-colors span:nth-child(2) { background: #b5645b; }
+.fetch-colors span:nth-child(3) { background: #7d9a83; }
+.fetch-colors span:nth-child(4) { background: #d2b26b; }
+.fetch-colors span:nth-child(5) { background: #4f7a94; }
+.fetch-colors span:nth-child(6) { background: #dfe4e2; }
+
 /* Optional command box */
 .cli {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
@@ -184,4 +220,21 @@ h3 { font-size: 18px; margin: 0 0 8px; }
   .cards { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
   .footer { margin-left: 260px; }
   html { scroll-padding-top: 80px; }
+}
+
+/* Very wide screens: the neofetch panel sits fixed on the right. */
+@media (min-width: 1440px) {
+  .fetch {
+    position: fixed; top: 111px; right: 40px;
+    width: 400px; margin: 0;
+  }
+  .avatar { width: 96px; height: 96px; }
+  .fetch-body { gap: 16px; }
+  .terminal { margin-right: 460px; max-width: none; }
+}
+
+@media (max-width: 640px) {
+  .avatar { width: 88px; height: 88px; }
+  .fetch-body { gap: 14px; }
+  .fetch { font-size: 13px; padding: 16px; }
 }
