@@ -1,5 +1,7 @@
-/* Neofetch quick facts: a button in the intro (#fetch-open) opens a <dialog> (#fetch). See js/fetch.js.
-   Pixel art is assets/avatar.png (128px, scaled up crisply). */
+/* Neofetch quick facts (#fetch, a <dialog>). Pixel art is assets/avatar.png (128px, scaled up crisply).
+   Below 1600px: hidden behind the #fetch-open button and shown as a modal.
+   From 1600px: always shown inline beside the intro; the button is hidden.
+   js/fetch.js detects the mode from whether #fetch-open is visible, so 1600px lives only in this file. */
 .fetch-open { margin: 4px 0 18px; font-size: 15px; }
 .fetch-open .ps1 { margin-right: 4px; }
 .fetch-open-hint { color: var(--muted); }
@@ -60,4 +62,16 @@
 
 @media (prefers-reduced-motion: reduce) {
   .fetch[open] { animation: none; }
+}
+
+/* Enough room: show the panel inline next to the intro instead of the button. */
+@media (min-width: 1600px) {
+  .fetch-open, .fetch-close { display: none; }
+  .fetch {
+    display: block; position: static;
+    width: auto; max-height: none; margin: 0;
+    box-shadow: none; animation: none;
+    font-size: clamp(14px, 0.75vw, 17px);
+  }
+  .avatar { width: clamp(200px, 13vw, 320px); }
 }

@@ -54,6 +54,7 @@
   </nav>
 
   <main class="terminal">
+    <div class="intro">
     <section id="home" class="hero">
       <p class="cmd"><span class="ps1"></span> whoami</p>
       <h1 class="type-target">Hi, I'm Abhishek Basnet.</h1>
@@ -62,7 +63,8 @@
       <p class="hint">Click a section in the menu, or scroll down. You can also type <kbd>help</kbd> in the box at the bottom.</p>
     </section>
 
-    <!-- Quick facts in neofetch style, opened by #fetch-open (see js/fetch.js). -->
+    <!-- Quick facts in neofetch style. Wide screens: shown inline beside the intro.
+         Narrower screens: hidden behind #fetch-open and shown as a modal (see js/fetch.js). -->
     <dialog class="fetch" id="fetch" aria-label="Quick facts">
       <div class="fetch-head">
         <p class="cmd"><span class="ps1"></span> neofetch</p>
@@ -83,6 +85,7 @@
       </div>
       <div class="fetch-colors" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
     </dialog>
+    </div>
 
     <section id="experience">
       <p class="cmd"><span class="ps1"></span> history</p>

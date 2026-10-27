@@ -1,5 +1,5 @@
 /* Page skeleton: top bar, section menu, main column, footer, and how they move per screen size.
-   Breakpoints: <=640 phone, 641-1099 tablet/small laptop, >=1100 sidebar menu, >=1280 two-column about/skills. */
+   Breakpoints: <=640 phone, 641-1099 tablet/small laptop, >=1100 sidebar menu, >=1280 two-column about/skills, >=1600 intro + inline neofetch. */
 .topbar {
   position: sticky; top: 0; z-index: 10;
   display: flex; justify-content: space-between; align-items: center;
@@ -55,6 +55,18 @@ section { padding: 72px 0 24px; }
   .footer { margin-left: var(--sidebar-w); }
   html { scroll-padding-top: 80px; }
   .lead { font-size: clamp(20px, 1.15vw, 24px); }
+}
+
+/* Very wide screens: intro + inline neofetch panel side by side (same 1600px as css/components/fetch.css). */
+@media (min-width: 1600px) {
+  .intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    gap: clamp(32px, 4vw, 96px);
+    align-items: center;
+    padding-top: 72px;
+  }
+  .intro .hero { padding-top: 24px; }
 }
 
 /* Large screens: about + skills side by side. */
