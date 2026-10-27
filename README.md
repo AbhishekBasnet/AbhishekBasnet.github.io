@@ -1,4 +1,4 @@
-# Abhishek Basnet — Portfolio
+# Abhishek Man Basnet — Portfolio
 
 A terminal-style personal portfolio with a calm Nordic look. Plain HTML, CSS and JavaScript: no build step, no dependencies.
 
