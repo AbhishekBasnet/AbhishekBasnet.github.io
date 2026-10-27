@@ -1,0 +1,10 @@
+/* Boot screen shown briefly on first visit (see js/boot.js). */
+#boot {
+  position: fixed; inset: 0; z-index: 50;
+  background: var(--bg);
+  display: grid; place-items: center;
+  transition: opacity .4s ease;
+}
+#boot.done { opacity: 0; pointer-events: none; }
+#boot-log { font: 15px/1.8 var(--mono); color: var(--muted); min-width: min(420px, 90vw); }
+#boot-skip { position: absolute; bottom: 24px; right: 24px; }

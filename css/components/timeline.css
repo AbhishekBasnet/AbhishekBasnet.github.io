@@ -1,0 +1,15 @@
+/* Experience timeline (#experience): vertical on small screens, horizontal on large ones. */
+.timeline { list-style: none; padding: 0; margin: 0; border-left: 2px solid var(--line); }
+.timeline li { display: grid; padding: 0 0 22px 20px; position: relative; }
+.timeline li::before { content: ""; position: absolute; left: -6px; top: 9px; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); }
+.when { font: 14px var(--mono); color: var(--muted); }
+.why { color: var(--muted); }
+
+@media (min-width: 1280px) {
+  .timeline {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 24px 40px;
+    border-left: none; border-top: 2px solid var(--line); padding-top: 28px;
+  }
+  .timeline li { padding: 0; align-content: start; }
+  .timeline li::before { left: 0; top: -34px; }
+}

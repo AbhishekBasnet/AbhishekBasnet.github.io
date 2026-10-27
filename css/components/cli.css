@@ -1,0 +1,22 @@
+/* Optional command box fixed to the bottom, and the output it prints (see js/cli.js). Hidden on phones. */
+.cli {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
+  display: flex; gap: 10px; align-items: center;
+  padding: 12px clamp(16px, 4vw, 48px);
+  background: var(--panel);
+  border-top: 1px solid var(--line);
+  font-family: var(--mono);
+}
+.cli input {
+  flex: 1; min-width: 0;
+  font: 15px var(--mono); color: var(--text);
+  background: transparent; border: none; outline: none;
+}
+
+#output { scroll-margin-bottom: 90px; }
+#output:empty { display: none; }
+#output pre { font: 15px/1.7 var(--mono); white-space: pre-wrap; margin: 0; }
+
+@media (max-width: 640px) {
+  .cli { display: none; }
+}

@@ -8,7 +8,23 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <!-- Styles: tokens (colours/fonts) -> base (elements) -> layout (page skeleton) -> components (one file per section) -->
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components/boot.css">
+  <link rel="stylesheet" href="css/components/fetch.css">
+  <link rel="stylesheet" href="css/components/timeline.css">
+  <link rel="stylesheet" href="css/components/cards.css">
+  <link rel="stylesheet" href="css/components/skills.css">
+  <link rel="stylesheet" href="css/components/contact.css">
+  <link rel="stylesheet" href="css/components/cli.css">
+  <script src="js/theme.js"></script>
+  <!-- Behaviour: one small file per feature, plain scripts so the page also works when opened from disk -->
+  <script src="js/boot.js" defer></script>
+  <script src="js/nav.js" defer></script>
+  <script src="js/contact.js" defer></script>
+  <script src="js/cli.js" defer></script>
 </head>
 <body>
   <!-- Short boot screen. Click, press any key, or wait ~1.5s to skip. -->
@@ -46,7 +62,7 @@
     <aside class="fetch" aria-label="Quick facts">
       <p class="cmd"><span class="ps1">abhishek@nordic:~$</span> neofetch</p>
       <div class="fetch-body">
-        <img class="avatar" src="assets/avatar.png" alt="Pixel art of a developer desk with three monitors in a neon cyberpunk city" width="120" height="120">
+        <img class="avatar" src="assets/avatar.png" alt="Pixel art of a developer desk with three monitors in a neon cyberpunk city" width="512" height="512">
         <dl class="fetch-info">
           <div class="fetch-title"><span>abhishek</span>@<span>nordic</span></div>
           <div class="fetch-rule">----------------</div>
@@ -161,6 +177,5 @@
 
   <footer class="footer">© <span id="year"></span> Abhishek Basnet · built with plain HTML, CSS &amp; JS</footer>
 
-  <script src="script.js"></script>
 </body>
 </html>

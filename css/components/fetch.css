@@ -1,0 +1,48 @@
+/* Neofetch quick-facts panel with the pixel-art scene (assets/avatar.png, made by tools/draw_avatar.py). */
+.fetch {
+  margin: 8px 0 0;
+  padding: 20px 22px;
+  max-width: 640px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  font: 14px/1.6 var(--mono);
+}
+.fetch .cmd { font-size: 13px; margin-bottom: 14px; }
+.fetch-body { display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start; }
+.avatar {
+  width: 240px; height: auto; aspect-ratio: 1; flex: none;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+}
+.fetch-info { margin: 0; min-width: 220px; flex: 1; }
+.fetch-info > div { display: flex; gap: 8px; }
+.fetch-info > .fetch-title, .fetch-info > .fetch-rule { display: block; }
+.fetch-info dt { color: var(--accent); flex: none; }
+.fetch-info dt::after { content: ":"; }
+.fetch-info dd { margin: 0; }
+.fetch-title span { color: var(--accent-2); font-weight: 600; }
+.fetch-rule { color: var(--muted); }
+.dot { display: inline-block; width: 8px; height: 8px; margin-right: 6px; border-radius: 50%; background: #6aa77a; }
+
+/* Colour strip matches the neon palette of the avatar */
+.fetch-colors { display: flex; margin-top: 16px; }
+.fetch-colors span { width: 28px; height: 14px; }
+.fetch-colors span:nth-child(1) { background: #1a0f2e; }
+.fetch-colors span:nth-child(2) { background: #ff2e88; }
+.fetch-colors span:nth-child(3) { background: #9d4edd; }
+.fetch-colors span:nth-child(4) { background: #ffbe46; }
+.fetch-colors span:nth-child(5) { background: #00e5ff; }
+.fetch-colors span:nth-child(6) { background: #e6e1f0; }
+
+@media (min-width: 1280px) {
+  .fetch { max-width: none; margin: 0; font-size: clamp(14px, 0.75vw, 17px); padding: clamp(20px, 1.5vw, 32px); }
+  .avatar { width: clamp(240px, 19vw, 460px); }
+  .fetch-body { gap: clamp(18px, 1.5vw, 32px); }
+}
+
+@media (max-width: 640px) {
+  .fetch { font-size: 13px; padding: 16px; }
+  .fetch-body { flex-direction: column; gap: 14px; }
+  .avatar { width: 100%; max-width: 420px; }
+}

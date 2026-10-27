@@ -1,0 +1,71 @@
+/* Page skeleton: top bar, section menu, main column, footer, and how they move per screen size.
+   Breakpoints: <=640 phone, 641-1099 tablet/small laptop, >=1100 sidebar menu, >=1280 two-column sections. */
+.topbar {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px clamp(16px, 4vw, 48px);
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+.brand { font: 600 18px var(--mono); color: var(--text); text-decoration: none; }
+.prompt { color: var(--accent-2); }
+.topbar-actions { display: flex; gap: 10px; align-items: center; }
+
+.menu {
+  position: sticky; top: 62px; z-index: 9;
+  display: flex; flex-wrap: wrap; gap: 6px 22px;
+  padding: 10px clamp(16px, 4vw, 48px);
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+  font-family: var(--mono);
+}
+.menu a { color: var(--text); text-decoration: none; padding: 2px 0; border-bottom: 2px solid transparent; }
+.menu a:hover, .menu a.active { color: var(--accent); border-color: var(--accent); }
+
+.terminal { max-width: 860px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 32px) 140px; }
+section { padding: 72px 0 24px; }
+.hero { padding-top: 96px; }
+.lead { font-size: 20px; max-width: 34em; }
+.hint { color: var(--muted); font-size: 15px; }
+
+.footer { text-align: center; font: 13px var(--mono); color: var(--muted); padding: 0 16px 90px; }
+
+/* Phones */
+@media (max-width: 640px) {
+  .footer { padding-bottom: 32px; }
+  .brand { font-size: 16px; }
+  #theme-toggle { padding: 7px 10px; }
+  .menu { top: 58px; gap: 4px 16px; font-size: 15px; }
+}
+
+/* Wide screens: menu becomes a left sidebar, content fills the rest. */
+@media (min-width: 1100px) {
+  .menu {
+    position: fixed; top: var(--topbar-h); bottom: var(--cli-h); left: 0;
+    width: var(--sidebar-w);
+    flex-direction: column; flex-wrap: nowrap; gap: 2px;
+    padding: 40px 24px;
+    border-bottom: none;
+    border-right: 1px solid var(--line);
+  }
+  .menu::before { content: "~/portfolio"; color: var(--muted); font-size: 14px; padding: 0 12px 10px; }
+  .menu a { border-bottom: none; border-left: 2px solid transparent; border-radius: 0 6px 6px 0; padding: 6px 12px; }
+  .menu a.active { border-left-color: var(--accent); background: var(--panel); }
+  .terminal { max-width: 2100px; margin: 0 0 0 var(--sidebar-w); padding: 0 clamp(40px, 4vw, 96px) 140px; }
+  .footer { margin-left: var(--sidebar-w); }
+  html { scroll-padding-top: 80px; }
+  .lead { font-size: clamp(20px, 1.15vw, 24px); }
+}
+
+/* Large screens: intro + neofetch side by side, about + skills side by side. */
+@media (min-width: 1280px) {
+  .intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    gap: clamp(32px, 4vw, 96px);
+    align-items: center;
+    padding-top: 72px;
+  }
+  .intro .hero { padding-top: 24px; }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 4vw, 96px); }
+}

@@ -1,0 +1,36 @@
+/* Design tokens: every colour and font lives here. Change the look by editing only this file. */
+:root {
+  --bg: #eef0ee;
+  --panel: #f7f8f6;
+  --text: #2b3138;
+  --muted: #6b7680;
+  --line: #d6dbd8;
+  --accent: #4f7a94;      /* fjord blue */
+  --accent-2: #7d9a83;    /* sage */
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+  --sans: "Inter", system-ui, sans-serif;
+
+  --topbar-h: 63px;
+  --sidebar-w: 260px;
+  --cli-h: 53px;
+}
+:root[data-theme="dark"] {
+  --bg: #1f252b;
+  --panel: #252c33;
+  --text: #dfe4e2;
+  --muted: #94a0a8;
+  --line: #36404a;
+  --accent: #8fb5cc;
+  --accent-2: #a3bfa8;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1f252b;
+    --panel: #252c33;
+    --text: #dfe4e2;
+    --muted: #94a0a8;
+    --line: #36404a;
+    --accent: #8fb5cc;
+    --accent-2: #a3bfa8;
+  }
+}
