@@ -79,7 +79,7 @@ const input = document.getElementById("cli-input");
 const history = [];
 let historyIndex = 0;
 
-const sections = ["about", "projects", "skills", "experience", "contact"];
+const sections = ["experience", "projects", "about", "skills", "contact"];
 const commands = {
   help: () => "Commands: " + sections.join(", ") + ", resume, theme, fish, clear",
   resume: () => { location.href = "resume.pdf"; return "Opening resume ..."; },
