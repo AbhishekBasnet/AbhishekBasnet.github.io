@@ -31,6 +31,7 @@ js/
   cli.js                   Optional typed commands (help, fish, theme, ...)
 assets/
   avatar.png               128x128 pixel-art scene in the neofetch dialog
+  resume.pdf               CV behind the Resume button (replace this file to update it)
 tools/
   draw_avatar.py           Generates assets/avatar.png from code
   pixelate.py              Turns a real photo into a pixel-art avatar
@@ -46,7 +47,7 @@ docs/
 | Change colours or fonts          | `css/tokens.css`                                        |
 | Change the `user@host:~$` prompt | `css/tokens.css`: `--prompt-user`, `--prompt-host`      |
 | Change email                     | `index.html`: the `mailto:` link with `id="email-link"` |
-| Change resume file               | `index.html`: the link with `id="resume-link"`          |
+| Update resume                    | Replace `assets/resume.pdf` (keep the name)             |
 | Add a new section                | `index.html`: add `<section id="x">` and a menu link `<a href="#x">` (the `x` command works automatically) |
 | Add a typed command              | `js/cli.js`, `commands` object                          |
 | Regenerate the avatar            | `pip install pillow numpy && python3 tools/draw_avatar.py` |
