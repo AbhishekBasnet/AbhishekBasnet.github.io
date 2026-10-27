@@ -1,6 +1,6 @@
 /* Skills list (#skills). */
 .skills { display: grid; grid-template-columns: max-content 1fr; gap: 10px 28px; margin: 0; }
-.skills dt { font-family: var(--mono); color: var(--accent); }
+.skills dt { font-weight: 600; color: var(--accent); }
 .skills dd { margin: 0; }
 
 @media (max-width: 640px) {

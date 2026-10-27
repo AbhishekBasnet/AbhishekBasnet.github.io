@@ -11,6 +11,7 @@
   function set(theme) {
     root.dataset.theme = theme;
     try { localStorage.setItem("theme", theme); } catch (e) {}
+    syncSwitch();
   }
 
   function current() {
@@ -25,7 +26,18 @@
   window.Portfolio = window.Portfolio || {};
   window.Portfolio.theme = { set, current, toggle };
 
+  // The header switch (absent on 404.html) shows "on" while dark mode is active.
+  function syncSwitch() {
+    const sw = document.getElementById("theme-toggle");
+    if (sw) sw.setAttribute("aria-checked", String(current() === "dark"));
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("theme-toggle").addEventListener("click", toggle);
+    const sw = document.getElementById("theme-toggle");
+    if (!sw) return;
+    sw.addEventListener("click", toggle);
+    syncSwitch();
+    // Follow the system setting live until the visitor picks a theme themselves.
+    matchMedia("(prefers-color-scheme: dark)").addEventListener("change", syncSwitch);
   });
 })();

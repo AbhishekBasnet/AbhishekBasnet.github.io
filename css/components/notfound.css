@@ -1,0 +1,9 @@
+/* 404 page (404.html): one centred terminal message. */
+.notfound {
+  min-height: 100dvh;
+  display: grid; place-content: center;
+  padding: 24px 16px;
+  max-width: 640px; margin: 0 auto;
+}
+.notfound .error { font: 15px var(--mono); color: var(--muted); margin: 0 0 24px; }
+.notfound p { margin: 0 0 24px; }

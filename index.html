@@ -6,14 +6,28 @@
   <title>Abhishek Man Basnet — Software Engineer</title>
   <meta name="author" content="Abhishek Man Basnet">
   <meta name="description" content="Portfolio of Abhishek Man Basnet: software engineer from Nepal.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
-  <!-- Styles: tokens (colours/fonts) -> base (elements) -> layout (page skeleton) -> components (one file per section) -->
+  <link rel="canonical" href="https://abhishekbasnet.github.io/">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <meta name="theme-color" content="#1f252b">
+  <!-- Link previews (LinkedIn, WhatsApp, Slack, X). Image made by tools/draw_social.py; URLs must be absolute. -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://abhishekbasnet.github.io/">
+  <meta property="og:title" content="Abhishek Man Basnet — Software Engineer">
+  <meta property="og:description" content="Software engineer from Nepal: Flutter, Django and Go. Experience, projects and contact.">
+  <meta property="og:image" content="https://abhishekbasnet.github.io/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Abhishek Man Basnet, Software Engineer, next to a pixel-art developer desk">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="assets/fonts/dm-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <!-- Styles: fonts -> tokens (colours/fonts) -> base (elements) -> layout (page skeleton) -> components (one file per section) -->
+  <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components/boot.css">
+  <link rel="stylesheet" href="css/components/theme-switch.css">
   <link rel="stylesheet" href="css/components/fetch.css">
   <link rel="stylesheet" href="css/components/timeline.css">
   <link rel="stylesheet" href="css/components/cards.css">
@@ -31,15 +45,20 @@
 </head>
 <body>
   <!-- Short boot screen. Click, press any key, or wait ~1.5s to skip. -->
-  <div id="boot" aria-hidden="true">
-    <pre id="boot-log"></pre>
+  <div id="boot">
+    <pre id="boot-log" aria-hidden="true"></pre>
     <button id="boot-skip" type="button">Skip →</button>
   </div>
 
   <header class="topbar">
-    <a class="brand" href="#home"><span class="prompt">~</span> abhishek<span class="cursor">_</span></a>
+    <a class="brand" href="#home"><span class="prompt" aria-hidden="true">~</span> abhishek<span class="cursor" aria-hidden="true">_</span></a>
     <div class="topbar-actions">
-      <button id="theme-toggle" type="button" aria-label="Switch light or dark theme">◐ theme</button>
+      <!-- Light/dark switch: aria-checked = dark mode on (kept in sync by js/theme.js). -->
+      <button id="theme-toggle" class="theme-switch" type="button" role="switch" aria-checked="false" aria-label="Dark mode">
+        <svg class="theme-switch-sun" aria-hidden="true" viewBox="0 0 16 16"><circle cx="8" cy="8" r="3" fill="currentColor"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3 3l1.4 1.4M11.6 11.6L13 13M3 13l1.4-1.4M11.6 4.4L13 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <svg class="theme-switch-moon" aria-hidden="true" viewBox="0 0 16 16"><path d="M13.5 10.2A6 6 0 0 1 5.8 2.5a6 6 0 1 0 7.7 7.7z" fill="currentColor"/></svg>
+        <span class="theme-switch-knob" aria-hidden="true"></span>
+      </button>
       <a class="btn btn-primary" id="resume-link" href="assets/resume.pdf" download="Abhishek_Man_Basnet_CV.pdf">↓ Resume</a>
     </div>
   </header>
@@ -56,10 +75,10 @@
   <main class="terminal">
     <div class="intro">
     <section id="home" class="hero">
-      <p class="cmd"><span class="ps1"></span> whoami</p>
-      <h1 class="type-target">Hi, I'm Abhishek Man Basnet.</h1>
+      <p class="cmd"><span class="ps1" aria-hidden="true"></span> whoami</p>
+      <h1>Hi, I'm Abhishek Man Basnet.</h1>
       <p class="lead">I build backend systems and developer tools. I like software that is simple, fast and quietly reliable.</p>
-      <button type="button" class="btn fetch-open" id="fetch-open" aria-haspopup="dialog"><span class="ps1"></span> neofetch <span class="fetch-open-hint">· quick facts</span></button>
+      <button type="button" class="btn fetch-open" id="fetch-open" aria-haspopup="dialog"><span class="ps1" aria-hidden="true"></span> neofetch <span class="fetch-open-hint">· quick facts</span></button>
       <p class="hint">Click a section in the menu, or scroll down. You can also type <kbd>help</kbd> in the box at the bottom.</p>
     </section>
 
@@ -67,13 +86,13 @@
          Narrower screens: hidden behind #fetch-open and shown as a modal (see js/fetch.js). -->
     <dialog class="fetch" id="fetch" aria-label="Quick facts">
       <div class="fetch-head">
-        <p class="cmd"><span class="ps1"></span> neofetch</p>
+        <p class="cmd"><span class="ps1" aria-hidden="true"></span> neofetch</p>
         <button type="button" class="fetch-close" id="fetch-close" aria-label="Close quick facts">✕</button>
       </div>
       <div class="fetch-body">
         <img class="avatar" src="assets/avatar.png" alt="Pixel art of a developer desk with three monitors in a neon cyberpunk city" width="512" height="512">
         <dl class="fetch-info">
-          <div class="fetch-title"></div>
+          <div class="fetch-title" aria-hidden="true"></div>
           <div class="fetch-rule">----------------</div>
           <div><dt>Role</dt><dd>Software Engineer</dd></div>
           <div><dt>Location</dt><dd>Nepal</dd></div>
@@ -88,7 +107,7 @@
     </div>
 
     <section id="experience">
-      <p class="cmd"><span class="ps1"></span> history</p>
+      <p class="cmd"><span class="ps1" aria-hidden="true"></span> history</p>
       <h2>Experience</h2>
       <!-- Source: CV (Abhishek_Man_Basnet_CV.pdf). Hirdayangam ended Sep 2026 per owner. -->
       <ol class="timeline">
@@ -99,7 +118,7 @@
     </section>
 
     <section id="projects">
-      <p class="cmd"><span class="ps1"></span> ls projects/</p>
+      <p class="cmd"><span class="ps1" aria-hidden="true"></span> ls projects/</p>
       <h2>Projects</h2>
       <div class="cards">
         <article class="card">
@@ -122,7 +141,7 @@
     </section>
 
     <section id="education">
-      <p class="cmd"><span class="ps1"></span> cat education.txt</p>
+      <p class="cmd"><span class="ps1" aria-hidden="true"></span> cat education.txt</p>
       <h2>Education</h2>
       <div class="degree">
         <span class="when">2022 – 2026</span>
@@ -133,7 +152,7 @@
 
     <div class="split">
     <section id="about">
-      <p class="cmd"><span class="ps1"></span> cat about.txt</p>
+      <p class="cmd"><span class="ps1" aria-hidden="true"></span> cat about.txt</p>
       <h2>About me</h2>
       <!-- Source: CV summary and key interests. -->
       <p>I'm a software engineering student from Lalitpur, Nepal, with a strong foundation in mobile app development using Flutter, and in backend systems and basic system design.</p>
@@ -142,7 +161,7 @@
     </section>
 
     <section id="skills">
-      <p class="cmd"><span class="ps1"></span> cat skills.txt</p>
+      <p class="cmd"><span class="ps1" aria-hidden="true"></span> cat skills.txt</p>
       <h2>Skills</h2>
       <!-- Source: CV skills, plus tools named in CV experience and projects. -->
       <dl class="skills">
@@ -156,7 +175,7 @@
     </div>
 
     <section id="contact">
-      <p class="cmd"><span class="ps1"></span> contact</p>
+      <p class="cmd"><span class="ps1" aria-hidden="true"></span> contact</p>
       <h2>Let's talk</h2>
       <p>The easiest way to reach me is email.</p>
       <div class="contact-row">
@@ -171,7 +190,7 @@
   </main>
 
   <form id="cli" class="cli" autocomplete="off">
-    <label for="cli-input" class="ps1"></label>
+    <label for="cli-input" class="ps1" aria-hidden="true"></label>
     <input id="cli-input" aria-label="Type a command" type="text" spellcheck="false" placeholder="type help (optional)">
   </form>
 

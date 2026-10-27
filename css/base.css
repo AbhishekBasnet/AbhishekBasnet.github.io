@@ -10,13 +10,13 @@ body {
 a { color: var(--accent); }
 kbd { font-family: var(--mono); background: var(--panel); border: 1px solid var(--line); border-radius: 4px; padding: 0 .35em; }
 
-h1, h2, h3 { font-family: var(--mono); font-weight: 600; line-height: 1.25; }
+h1, h2, h3 { font-family: var(--sans); font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; }
 h1 { font-size: clamp(30px, 5vw, 46px); margin: 0 0 18px; }
 h2 { font-size: 26px; margin: 0 0 20px; }
 h3 { font-size: 18px; margin: 0 0 8px; }
 
 button, .btn {
-  font: 500 15px var(--mono);
+  font: 500 15px var(--sans);
   color: var(--text);
   background: transparent;
   border: 1px solid var(--line);
@@ -29,6 +29,7 @@ button, .btn {
 button:hover, .btn:hover { border-color: var(--accent); color: var(--accent); }
 .btn-primary { background: var(--accent); border-color: var(--accent); color: var(--bg); }
 .btn-primary:hover { color: var(--bg); opacity: .9; }
+.icon { width: 1em; height: 1em; vertical-align: -0.125em; }
 
 /* Terminal prompt text used across sections */
 .cmd { font: 15px var(--mono); color: var(--muted); margin: 0 0 8px; }

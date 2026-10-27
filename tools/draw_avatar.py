@@ -1,25 +1,27 @@
-"""Draw the neofetch avatar: a cyberpunk developer desk seen from a ~30 degree angle.
+"""Draw the neofetch avatar: a 128x128 cyberpunk developer desk seen from a ~30 degree angle.
 
 The whole scene is generated from code (no source photo), so it is original art.
+The page scales it up with `image-rendering: pixelated` (css/components/fetch.css).
 
 Usage: python3 tools/draw_avatar.py [assets/avatar.png]
-Needs: pip install pillow numpy
+Needs: pip install pillow
 
 Layout of this file:
-  palette        - colours shared by every part of the scene
-  helpers        - perspective warp and small drawing utilities
-  textures       - flat images (city, screens) later warped into the scene
-  scene          - room, window, desk, monitors, keyboard, props
+  palette   - colours shared by every part of the scene
+  helpers   - perspective warp and small geometry utilities
+  textures  - flat images (city, screens) later warped into the scene
+  scene     - room, window, desk, monitors, keyboard, props
+Textures are drawn before the scene and in a fixed order: the city uses the
+seeded random generator, so changing the order changes the art.
 """
 import math
 import random
 import sys
 
-import numpy as np
-from PIL import Image, ImageDraw, ImageFilter
+from PIL import Image, ImageDraw
 
-SIZE = 512
-random.seed(3)
+SIZE = 128
+SEED = 3
 
 # ---------- palette ----------
 PINK = (255, 46, 136)
@@ -28,36 +30,40 @@ PURPLE = (157, 78, 221)
 AMBER = (255, 190, 70)
 WHITE = (230, 225, 245)
 FRAME = (12, 6, 22)
-METAL = (44, 38, 62)
-METAL_LIGHT = (70, 62, 94)
+METAL = (40, 34, 56)
 
 
 # ---------- helpers ----------
-def perspective_coeffs(dst_quad, src_w, src_h):
-    """Coefficients for Image.transform(PERSPECTIVE) mapping dst_quad back to a src_w x src_h rectangle."""
-    src = [(0, 0), (src_w, 0), (src_w, src_h), (0, src_h)]
-    rows, rhs = [], []
-    for (x, y), (u, v) in zip(dst_quad, src):
-        rows.append([x, y, 1, 0, 0, 0, -u * x, -u * y]); rhs.append(u)
-        rows.append([0, 0, 0, x, y, 1, -v * x, -v * y]); rhs.append(v)
-    return np.linalg.solve(np.array(rows, float), np.array(rhs, float)).tolist()
-
-
-def warp(canvas, texture, quad):
-    """Paint texture onto quad (top-left, top-right, bottom-right, bottom-left) of canvas."""
-    coeffs = perspective_coeffs(quad, *texture.size)
-    warped = texture.transform(canvas.size, Image.PERSPECTIVE, coeffs, Image.NEAREST)
-    mask = Image.new("L", canvas.size, 0)
-    ImageDraw.Draw(mask).polygon(quad, fill=255)
-    canvas.paste(warped, (0, 0), mask)
+def new_texture(w, h, bg):
+    img = Image.new("RGB", (w, h), bg)
+    return img, ImageDraw.Draw(img)
 
 
 def bilinear(quad, u, v):
-    """Point at (u, v) inside a quad, both in 0..1."""
+    """Point at (u, v) inside a quad (top-left, top-right, bottom-right, bottom-left), both in 0..1."""
     (x0, y0), (x1, y1), (x2, y2), (x3, y3) = quad
     x = (1 - u) * (1 - v) * x0 + u * (1 - v) * x1 + u * v * x2 + (1 - u) * v * x3
     y = (1 - u) * (1 - v) * y0 + u * (1 - v) * y1 + u * v * y2 + (1 - u) * v * y3
     return x, y
+
+
+def warp(canvas, texture, quad):
+    """Paint texture onto quad of canvas, nearest-pixel, by sampling it densely."""
+    tw, th = texture.size
+    n = 4 * max(tw, th)
+    dst, src = canvas.load(), texture.load()
+    for i in range(n + 1):
+        u = i / n
+        for j in range(n + 1):
+            v = j / n
+            x, y = bilinear(quad, u, v)
+            xi, yi = int(x), int(y)
+            if 0 <= xi < SIZE and 0 <= yi < SIZE:
+                dst[xi, yi] = src[min(int(u * tw), tw - 1), min(int(v * th), th - 1)]
+
+
+def lerp(a, b, t):
+    return (a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t)
 
 
 def inset(quad, px):
@@ -65,206 +71,134 @@ def inset(quad, px):
     return [(x0 + px, y0 + px), (x1 - px, y1 + px), (x2 - px, y2 - px), (x3 + px, y3 - px)]
 
 
-def mix(a, b, t):
-    return tuple(int(a[i] + (b[i] - a[i]) * t) for i in range(3))
-
-
-def glow(canvas, shape_fn, color, blur, strength=0.55):
-    """Additive soft glow drawn by shape_fn(draw) in color."""
-    layer = Image.new("RGB", canvas.size, (0, 0, 0))
-    shape_fn(ImageDraw.Draw(layer), color)
-    layer = layer.filter(ImageFilter.GaussianBlur(blur))
-    return Image.blend(canvas, Image.composite(layer, canvas, layer.convert("L")), strength)
-
-
 # ---------- textures ----------
-def city_texture():
-    w, h = 440, 264
-    img = Image.new("RGB", (w, h))
-    d = ImageDraw.Draw(img)
-    for y in range(h):
-        d.line((0, y, w, y), fill=mix((22, 8, 52), (170, 40, 120), y / h))
-    # moon with halo
-    for r, c in [(64, (120, 40, 110)), (54, (190, 70, 150)), (46, (255, 120, 175)), (38, (255, 160, 200))]:
-        d.ellipse((290 - r, 100 - r, 290 + r, 100 + r), fill=c)
-    for cx, cy, r in [(278, 88, 7), (300, 112, 5), (296, 82, 4)]:
-        d.ellipse((cx - r, cy - r, cx + r, cy + r), fill=(240, 135, 185))
-    # far skyline
-    x = 0
-    while x < w:
-        bw, bh = random.randint(22, 44), random.randint(90, 200)
-        d.rectangle((x, h - bh, x + bw, h), fill=(48, 24, 82))
-        if random.random() < 0.4:
-            d.line((x + bw // 2, h - bh - 18, x + bw // 2, h - bh), fill=(48, 24, 82), width=2)
-            d.rectangle((x + bw // 2 - 1, h - bh - 20, x + bw // 2 + 1, h - bh - 18), fill=PINK)
-        x += bw + random.randint(-4, 6)
-    # flying cars with light trails
-    for cx, cy, color, direction in [(70, 46, CYAN, 1), (200, 84, PINK, -1), (360, 34, AMBER, 1), (140, 140, CYAN, -1)]:
-        trail = range(1, 60)
-        for k in trail:
-            tx = cx - direction * (k + 18)
-            d.point((tx, cy + 4), fill=mix((0, 0, 0), color, max(0.0, 0.7 - k / 60)))
-            d.point((tx, cy + 5), fill=mix((0, 0, 0), color, max(0.0, 0.4 - k / 60)))
-        d.polygon([(cx - 18, cy + 8), (cx + 18, cy + 8), (cx + 14, cy + 2), (cx - 14, cy + 2)], fill=(84, 88, 116))
-        d.polygon([(cx - 8, cy + 2), (cx + 8, cy + 2), (cx + 5, cy - 3), (cx - 5, cy - 3)], fill=(120, 128, 160))
-        d.rectangle((cx - 4, cy - 2, cx + 4, cy + 1), fill=(150, 220, 255))
-        head = cx + 18 * direction
-        d.rectangle((head - 2, cy + 4, head + 2, cy + 6), fill=WHITE)
-        d.rectangle((cx - 12, cy + 9, cx + 12, cy + 10), fill=color)
-    # near buildings with lit windows, signs and a billboard
-    x = -6
-    while x < w:
-        bw, bh = random.randint(40, 64), random.randint(70, 150)
-        top = h - bh
-        d.rectangle((x, top, x + bw, h), fill=(18, 8, 34))
-        d.line((x, top, x + bw, top), fill=(60, 30, 90))
-        for wy in range(top + 8, h - 4, 10):
-            for wx in range(x + 6, x + bw - 6, 9):
-                if random.random() < 0.55:
-                    d.rectangle((wx, wy, wx + 4, wy + 5), fill=random.choice([PINK, CYAN, AMBER, PURPLE, (90, 60, 130)]))
-        if random.random() < 0.6:
-            sx = x + bw - 8
-            d.rectangle((sx, top + 14, sx + 4, top + 60), fill=random.choice([PINK, CYAN]))
-        x += bw + random.randint(2, 10)
-    d.rectangle((40, 150, 120, 186), fill=(10, 4, 20), outline=CYAN, width=2)
-    for i, c in enumerate([PINK, PINK, CYAN, PINK, AMBER]):
-        d.rectangle((50 + i * 13, 160, 58 + i * 13, 176), fill=c)
-    # rain
-    for _ in range(220):
-        rx, ry = random.randrange(w), random.randrange(h)
-        d.line((rx, ry, rx - 2, ry + 9), fill=(170, 150, 220))
+def city_texture(rng):
+    img, d = new_texture(110, 66, (0, 0, 0))
+    for y in range(66):
+        t = y / 65
+        d.line((0, y, 109, y), fill=(int(30 + 120 * t), int(10 + 20 * t), int(60 + 60 * t)))
+    d.ellipse((66, 14, 90, 38), fill=(255, 110, 170))                 # neon moon
+    d.ellipse((70, 18, 86, 34), fill=(255, 150, 195))
+    far = [(0, 10, 34), (9, 8, 44), (18, 12, 30), (31, 9, 50), (41, 14, 36),
+           (56, 8, 46), (65, 12, 28), (78, 10, 40), (89, 9, 52), (99, 11, 34)]
+    for x0, w, h in far:
+        d.rectangle((x0, 66 - h, x0 + w - 1, 65), fill=(40, 22, 70))
+    near = [(2, 12, 26), (16, 10, 38), (30, 14, 22), (46, 9, 32),
+            (58, 14, 20), (74, 11, 30), (88, 14, 24), (102, 8, 36)]
+    for x0, w, h in near:                                              # lit windows
+        d.rectangle((x0, 66 - h, x0 + w - 1, 65), fill=(18, 8, 34))
+        for y in range(67 - h, 64, 3):
+            for x in range(x0 + 2, x0 + w - 2, 3):
+                if rng.random() < 0.5:
+                    d.point((x, y), fill=rng.choice([PINK, CYAN, AMBER, PURPLE]))
+    d.rectangle((19, 32, 20, 44), fill=PINK)                           # neon signs
+    d.rectangle((50, 38, 51, 47), fill=CYAN)
+    d.rectangle((76, 40, 83, 41), fill=AMBER)
+    for x, y, color, direction in [(22, 10, CYAN, 1), (52, 20, PINK, -1), (92, 8, AMBER, 1)]:
+        d.rectangle((x, y, x + 8, y + 2), fill=(70, 74, 96))            # flying car
+        d.rectangle((x + 2, y - 1, x + 6, y - 1), fill=(110, 116, 140))
+        d.point((x + 9 if direction > 0 else x - 1, y + 1), fill=color)
+        tx0, tx1 = (x - 10, x - 1) if direction > 0 else (x + 9, x + 18)
+        length = tx1 - tx0 + 1
+        for k, tx in enumerate(range(tx0, tx1 + 1)):                   # light trail
+            f = (k + 1) / length if direction > 0 else 1 - k / length
+            d.point((tx, y + 1), fill=tuple(int(c * f * 0.6) for c in color))
+    for _ in range(45):                                                # rain
+        x, y = rng.randrange(110), rng.randrange(60)
+        d.line((x, y, x, y + 2), fill=(150, 130, 200))
     return img
 
 
 def dashboard_texture():
-    img = Image.new("RGB", (192, 132), (10, 12, 28))
-    d = ImageDraw.Draw(img)
-    d.rectangle((6, 6, 92, 58), outline=CYAN, width=2)
-    d.rectangle((14, 14, 84, 50), fill=(0, 90, 110))
-    d.ellipse((30, 18, 66, 46), outline=CYAN, width=3)
-    d.arc((30, 18, 66, 46), 0, 250, fill=PINK, width=4)
-    for i, (c, ln) in enumerate([(PINK, 80), (PURPLE, 60), (AMBER, 44), (CYAN, 70)]):
-        d.rectangle((102, 8 + i * 13, 102 + ln, 15 + i * 13), fill=c)
-    for i, hgt in enumerate([24, 40, 30, 52, 36, 58, 46, 62, 40, 50, 34, 56, 44, 60]):
-        d.rectangle((8 + i * 13, 126 - hgt, 16 + i * 13, 126), fill=CYAN if i % 2 else (0, 150, 180))
+    img, d = new_texture(36, 26, (12, 14, 30))
+    d.rectangle((2, 2, 15, 11), outline=CYAN)
+    d.rectangle((5, 5, 12, 8), fill=(0, 120, 140))
+    d.rectangle((18, 2, 33, 4), fill=PINK)
+    d.rectangle((18, 7, 29, 8), fill=PURPLE)
+    d.rectangle((18, 10, 26, 11), fill=AMBER)
+    for i, h in enumerate([4, 7, 5, 9, 6, 10, 8, 11, 7, 9]):
+        d.rectangle((3 + i * 3, 23 - h, 4 + i * 3, 23), fill=CYAN if i % 2 else (0, 160, 190))
     return img
 
 
 def waveform_texture():
-    img = Image.new("RGB", (192, 132), (18, 10, 32))
-    d = ImageDraw.Draw(img)
-    for x in range(0, 192, 16):
-        d.line((x, 0, x, 132), fill=(44, 26, 66))
-    for y in range(0, 132, 16):
-        d.line((0, y, 192, y), fill=(44, 26, 66))
-    prev_a = prev_b = None
-    for x in range(192):
-        a = (x, 60 + 34 * math.sin(x / 13))
-        b = (x, 70 + 20 * math.cos(x / 9))
-        if prev_a:
-            d.line((prev_a, a), fill=PINK, width=3)
-            d.line((prev_b, b), fill=AMBER, width=2)
-        prev_a, prev_b = a, b
-    d.text((6, 4), "SIGNAL 98%", fill=CYAN)
+    img, d = new_texture(36, 26, (18, 10, 30))
+    for x in range(0, 36, 6):
+        d.line((x, 0, x, 25), fill=(40, 24, 60))
+    for y in range(0, 26, 6):
+        d.line((0, y, 35, y), fill=(40, 24, 60))
+    for x in range(36):
+        d.point((x, int(12 + 7 * math.sin(x / 3.0))), fill=PINK)
+        d.point((x, int(13 + 4 * math.cos(x / 2.2))), fill=AMBER)
     return img
 
 
 def code_texture():
-    img = Image.new("RGB", (160, 132), (10, 16, 26))
-    d = ImageDraw.Draw(img)
-    lines = [
-        (0, [(PINK, 24), (WHITE, 40)]), (1, [(CYAN, 30), (WHITE, 22), (AMBER, 18)]),
-        (2, [(WHITE, 46)]), (2, [(CYAN, 20), (PINK, 28)]), (1, [(AMBER, 36)]),
-        (1, [(PINK, 18), (WHITE, 50)]), (2, [(CYAN, 40), (WHITE, 14)]), (0, [(PINK, 12)]),
-        (0, [(PINK, 24), (WHITE, 30)]), (1, [(CYAN, 52)]),
-    ]
-    for i, (indent, tokens) in enumerate(lines):
-        y = 6 + i * 12
-        d.rectangle((4, y, 12, y + 4), fill=(70, 80, 100))  # line number
-        x = 20 + indent * 12
-        for color, ln in tokens:
-            d.rectangle((x, y, x + ln, y + 4), fill=color)
-            x += ln + 6
-    d.rectangle((20, 6 + len(lines) * 12, 26, 6 + len(lines) * 12 + 6), fill=WHITE)  # cursor
+    img, d = new_texture(30, 26, (10, 16, 26))
+    lines = [(1, 10, PINK), (3, 16, CYAN), (3, 12, WHITE), (5, 14, CYAN), (5, 8, AMBER),
+             (3, 18, WHITE), (1, 6, PINK), (3, 13, CYAN), (3, 9, WHITE)]
+    for i, (indent, length, color) in enumerate(lines):
+        y = 2 + i * 3
+        d.line((indent, y, indent + length, y), fill=color)
+    d.rectangle((14, 23, 15, 24), fill=WHITE)                          # cursor
     return img
 
 
 # ---------- scene ----------
 def draw_scene():
+    rng = random.Random(SEED)
+    city = city_texture(rng)
+    screens = [dashboard_texture(), waveform_texture(), code_texture()]
+
     img = Image.new("RGB", (SIZE, SIZE))
     d = ImageDraw.Draw(img)
-    for y in range(SIZE):                                       # back wall
-        d.line((0, y, SIZE, y), fill=mix((26, 12, 44), (40, 20, 62), y / SIZE))
+    for y in range(SIZE):                                              # back wall
+        d.line((0, y, SIZE - 1, y), fill=(24 + y // 16, 12 + y // 32, 40 + y // 10))
 
-    window = [(16, 16), (496, 64), (496, 284), (16, 332)]       # receding window
-    warp(img, city_texture(), window)
-    img = glow(img, lambda g, c: g.polygon(window, fill=c), (120, 40, 140), 20, 0.25)
-    d = ImageDraw.Draw(img)
+    window = [(4, 4), (122, 16), (122, 70), (4, 82)]                   # receding window
+    warp(img, city, window)
     for a, b in [(0, 1), (3, 2), (0, 3), (1, 2)]:
-        d.line((window[a], window[b]), fill=FRAME, width=8)
-    for u in (0.36, 0.7):                                        # mullions
-        d.line((bilinear(window, u, 0), bilinear(window, u, 1)), fill=FRAME, width=6 if u < 0.5 else 4)
-    d.line((bilinear(window, 0, 0.42), bilinear(window, 1, 0.42)), fill=FRAME, width=3)
-    for k in range(3):                                          # glass reflections
-        x = 60 + k * 26
-        d.line((x, 40, x + 40, 120), fill=(70, 50, 110), width=2)
+        d.line((window[a], window[b]), fill=FRAME, width=2)
+    for u in (0.36, 0.7):                                              # mullions
+        d.line((lerp(window[0], window[1], u), lerp(window[3], window[2], u)), fill=FRAME, width=2 if u < 0.5 else 1)
 
-    desk = [(0, 336), (512, 288), (512, 400), (0, 480)]          # desk top + front edge
-    d.polygon(desk, fill=(46, 28, 62))
-    for k in range(1, 7):                                       # wood grain
-        d.line((bilinear(desk, 0, k / 7), bilinear(desk, 1, k / 7)), fill=(52, 32, 70), width=1)
-    d.line((desk[0], desk[1]), fill=(96, 56, 124), width=2)
-    d.polygon([(0, 480), (512, 400), (512, 424), (0, 512)], fill=(30, 18, 42))
+    desk = [(0, 84), (128, 72), (128, 100), (0, 120)]                  # desk top + front edge
+    d.polygon(desk, fill=(44, 26, 58))
+    d.line((desk[0], desk[1]), fill=(80, 46, 104))
+    d.polygon([(0, 120), (128, 100), (128, 106), (0, 127)], fill=(30, 18, 40))
+    for x0, y0 in [(10, 86), (48, 82), (88, 78)]:                      # screen glow on desk
+        d.ellipse((x0, y0, x0 + 28, y0 + 8), fill=(60, 34, 84))
 
-    monitors = [
-        ([(16, 152), (168, 160), (168, 288), (16, 304)], dashboard_texture(), CYAN),
-        ([(180, 160), (332, 168), (332, 284), (180, 292)], waveform_texture(), PINK),
-        ([(344, 168), (448, 184), (448, 272), (344, 284)], code_texture(), CYAN),
-    ]
-    for quad, _, color in monitors:                              # light spill on desk
-        cx = (quad[0][0] + quad[1][0]) / 2
-        img = glow(img, lambda g, c, cx=cx: g.ellipse((cx - 70, 316, cx + 70, 360), fill=c), color, 18, 0.35)
-    d = ImageDraw.Draw(img)
-    for quad, texture, _ in monitors:
+    monitors = [[(4, 38), (42, 40), (42, 72), (4, 76)],                # narrower to the right
+                [(45, 40), (83, 42), (83, 71), (45, 73)],
+                [(86, 42), (112, 46), (112, 68), (86, 71)]]
+    for quad, screen in zip(monitors, screens):
+        d.polygon(quad, fill=(8, 6, 14))                               # bezel
+        warp(img, screen, inset(quad, 2))
         mx = (quad[0][0] + quad[1][0]) // 2
         my = (quad[2][1] + quad[3][1]) // 2
-        d.rectangle((mx - 5, my - 4, mx + 5, my + 34), fill=METAL)             # stand
-        d.polygon([(mx - 28, my + 36), (mx + 26, my + 32), (mx + 30, my + 40), (mx - 24, my + 44)], fill=METAL)
-        depth = [quad[1], (quad[1][0] + 6, quad[1][1] + 4), (quad[2][0] + 6, quad[2][1] - 2), quad[2]]
-        d.polygon(depth, fill=(20, 16, 30))                                    # monitor thickness
-        d.polygon(quad, fill=(8, 6, 14))                                       # bezel
-        warp(img, texture, inset(quad, 7))
-        d = ImageDraw.Draw(img)
-        d.line((quad[3], quad[2]), fill=METAL_LIGHT, width=2)
+        d.rectangle((mx - 1, my, mx + 1, my + 8), fill=METAL)          # stand
+        d.polygon([(mx - 6, my + 9), (mx + 6, my + 8), (mx + 7, my + 10), (mx - 5, my + 11)], fill=METAL)
 
-    keyboard = [(64, 392), (264, 364), (280, 400), (80, 432)]
-    underglow = [(58, 398), (270, 368), (288, 410), (74, 442)]
-    img = glow(img, lambda g, c: g.polygon(underglow, fill=c), PURPLE, 10, 0.8)
-    d = ImageDraw.Draw(img)
-    d.polygon(keyboard, fill=(28, 22, 42))
-    rows, cols = 5, 15
-    for r in range(rows):
-        for k in range(cols):
-            span = 6 if r == rows - 1 and 4 <= k <= 9 else 1
-            if r == rows - 1 and 5 <= k <= 9:
-                continue
-            u0, u1 = (k + 0.12) / cols, (k + span - 0.12) / cols
-            v0, v1 = (r + 0.18) / rows, (r + 0.82) / rows
-            key = [bilinear(keyboard, u0, v0), bilinear(keyboard, u1, v0), bilinear(keyboard, u1, v1), bilinear(keyboard, u0, v1)]
-            color = WHITE if span > 1 else mix(PINK, CYAN, k / (cols - 1))
-            d.polygon(key, fill=color)
+    keyboard = [(16, 98), (66, 91), (70, 100), (20, 108)]
+    d.polygon([(15, 100), (68, 93), (72, 102), (19, 110)], fill=(120, 30, 120))   # RGB underglow
+    d.polygon(keyboard, fill=(26, 20, 40))
+    for row in range(4):                                               # keys, drawn per pixel row
+        for col in range(13):
+            x, y = bilinear(keyboard, (col + 0.5) / 13, (row + 0.6) / 4.4)
+            t = col / 12
+            color = (int(255 * (1 - t)), int(46 * (1 - t) + 229 * t), int(136 * (1 - t) + 255 * t))
+            if row == 3 and 3 <= col <= 8:
+                color = (200, 190, 230)                                # space bar
+            d.rectangle((int(x) - 1, int(y), int(x) + 1, int(y)), fill=color)
 
-    d.polygon([(300, 368), (380, 356), (392, 392), (312, 404)], fill=(34, 24, 50))   # mouse pad
-    d.ellipse((330, 366, 356, 386), fill=METAL_LIGHT)
-    d.line((343, 368, 343, 374), fill=CYAN, width=2)
-
-    d.rectangle((404, 300, 436, 340), fill=(140, 80, 56))                          # mug
-    d.ellipse((404, 294, 436, 306), fill=(150, 88, 62))
-    d.ellipse((408, 297, 432, 304), fill=(70, 36, 24))
-    d.arc((428, 306, 448, 330), -90, 90, fill=(140, 80, 56), width=5)
-    for k in range(3):                                                             # steam
-        pts = [(414 + k * 7 + 4 * math.sin(t / 3 + k), 290 - t) for t in range(0, 40, 2)]
-        d.line(pts, fill=(170, 150, 205), width=2)
+    d.ellipse((78, 93, 85, 98), fill=METAL)                            # mouse
+    d.point((81, 94), fill=CYAN)
+    d.rectangle((100, 80, 107, 89), fill=(130, 74, 52))                # mug + steam
+    d.rectangle((101, 80, 106, 81), fill=(70, 36, 24))
+    d.rectangle((108, 82, 109, 86), fill=(130, 74, 52))
+    for x, y in [(102, 77), (103, 75), (102, 73), (104, 71), (103, 69)]:
+        d.point((x, y), fill=(170, 150, 200))
     return img
 
 

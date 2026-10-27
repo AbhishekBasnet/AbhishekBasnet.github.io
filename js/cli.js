@@ -24,7 +24,7 @@
 
   function print(cmd, reply) {
     const pre = document.createElement("pre");
-    pre.innerHTML = '<span class="ps1"></span> ';
+    pre.innerHTML = '<span class="ps1" aria-hidden="true"></span> ';
     pre.append(cmd + (reply ? "\n" + reply : ""));
     output.append(pre);
     output.scrollIntoView({ behavior: "smooth", block: "end" });

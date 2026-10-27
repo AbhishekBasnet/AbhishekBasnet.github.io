@@ -1,4 +1,5 @@
 // Boot screen: short, skippable, shown once per browser session. Skipped for reduced-motion users.
+// The log text is decorative (aria-hidden); the Skip button stays reachable by keyboard and screen readers.
 (function () {
   const boot = document.getElementById("boot");
   const log = document.getElementById("boot-log");
@@ -10,8 +11,10 @@
   ];
 
   function end() {
+    if (boot.classList.contains("done")) return;
     boot.classList.add("done");
     try { sessionStorage.setItem("booted", "1"); } catch (e) {}
+    setTimeout(() => boot.remove(), 450);  // after the fade, so the Skip button can't keep focus
   }
 
   let seen = false;
