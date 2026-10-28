@@ -23,7 +23,7 @@ css/
   base.css                 Element defaults: body, headings, links, buttons
   layout.css               Page skeleton: top bar, menu/sidebar, columns, breakpoints
   components/              One file per page part
-    boot.css  theme-switch.css  fetch.css  timeline.css  cards.css  education.css  skills.css  contact.css  cli.css  notfound.css
+    boot.css  sky.css  theme-switch.css  fetch.css  timeline.css  cards.css  education.css  skills.css  contact.css  cli.css  notfound.css
 js/
   theme.js                 Light/dark toggle (loaded first, exposes window.Portfolio.theme)
   boot.js                  Startup animation
@@ -51,6 +51,7 @@ docs/
 |----------------------------------|---------------------------------------------------------|
 | Change text, projects, jobs      | `index.html` (look for `DRAFT` / `TODO` comments)       |
 | Change colours or fonts          | `css/tokens.css` (font files: `css/fonts.css`)          |
+| Change the daily sky backdrop    | Its look: `css/components/sky.css`. The art itself is built daily by `scripts/build_assets.py` in the [profile repo](https://github.com/AbhishekBasnet/AbhishekBasnet) |
 | Update the link-preview image    | Edit text in `tools/draw_social.py`, then run it        |
 | Change the `user@host:~$` prompt | `css/tokens.css`: `--prompt-user`, `--prompt-host`      |
 | Change email                     | `index.html`: the `mailto:` link with `id="email-link"` |

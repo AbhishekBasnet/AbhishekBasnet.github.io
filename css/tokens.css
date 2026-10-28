@@ -7,6 +7,8 @@
   --line: #d6dbd8;
   --accent: #4f7a94;      /* fjord blue */
   --accent-2: #7d9a83;    /* sage */
+  /* The day's sky behind the intro, rebuilt daily by the profile repo (see css/components/sky.css). */
+  --sky: url("https://raw.githubusercontent.com/AbhishekBasnet/AbhishekBasnet/output/backdrop-light.svg");
   --mono: "IBM Plex Mono", ui-monospace, monospace;
   --sans: "DM Sans", system-ui, sans-serif;
 
@@ -26,6 +28,7 @@
   --line: #36404a;
   --accent: #8fb5cc;
   --accent-2: #a3bfa8;
+  --sky: url("https://raw.githubusercontent.com/AbhishekBasnet/AbhishekBasnet/output/backdrop-dark.svg");
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -36,5 +39,6 @@
     --line: #36404a;
     --accent: #8fb5cc;
     --accent-2: #a3bfa8;
+    --sky: url("https://raw.githubusercontent.com/AbhishekBasnet/AbhishekBasnet/output/backdrop-dark.svg");
   }
 }

@@ -1,0 +1,29 @@
+/* The day's sky behind the intro: the same art as the GitHub profile header, rebuilt
+   every day in this site's palette by github.com/AbhishekBasnet/AbhishekBasnet
+   (scripts/build_assets.py). The image follows the theme through --sky in tokens.css.
+   The intro gets room underneath for the mountains (--ridge, about the height the
+   ridge takes up when the image fits the column's width), so its text sits in the
+   sky above them.
+   The image spans the main column (out to --gutter from layout.css) and fades out
+   at the edges and the bottom. It is decoration only, so it ignores the pointer. */
+.intro { --ridge: min(17vw, 270px); position: relative; isolation: isolate; padding-bottom: var(--ridge); }
+.intro::before {
+  content: "";
+  position: absolute; z-index: -1;
+  inset: 0 calc(-1 * var(--gutter));
+  background: var(--sky) center bottom / 100% auto no-repeat;   /* fit the width, so the ridge keeps to --ridge */
+  opacity: .75;
+  /* the masks only use alpha: fade in from both sides, and out at the very bottom */
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent),
+                      linear-gradient(to bottom, #000 85%, transparent);
+  -webkit-mask-composite: source-in;
+          mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent),
+                      linear-gradient(to bottom, #000 85%, transparent);
+          mask-composite: intersect;
+  pointer-events: none;
+}
+
+/* Phones: fainter, so the intro text stays clear on a small screen. */
+@media (max-width: 640px) {
+  .intro::before { opacity: .55; }
+}
